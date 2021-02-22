@@ -1,18 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="br.com.cellsgroupleader">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
+        android:name=".FirebaseHandler"
         android:allowBackup="true"
+        android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
+        android:installLocation="auto"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.CellsGroupLeader">
+        android:theme="@style/AppTheme"
+        android:versionCode="1"
+        android:versionName="1.0.0"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".HomeActivity"
+            android:name=".celulas.AddCelulaActivity"
+            android:label="@string/title_activity_add_celula"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".contato.ContatoActivity"
+            android:label="@string/title_activity_contato"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".celulas.CelulasActivity"
+            android:label="@string/title_activity_celulas"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".leader.LeaderActivity"
+            android:label="@string/lideres"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".RememberActivity" />
+        <activity android:name=".RegisterActivity" />
+        <activity
+            android:name=".leader.ReadLeaderActivity"
+            android:label="@string/read_lider"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".leader.EditLeaderActivity"
+            android:label="@string/editar_lider"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".igreja.DeleteIgrejaActivity"
+            android:label="@string/apagar_igreja_min"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".igreja.EditIgrejaActivity"
+            android:label="@string/editar_igreja"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".igreja.IgrejasCriadasActivity"
+            android:label="@string/title_activity_igrejas_criadas"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".SobreActivity"
+            android:label="@string/Sobre"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".leader.AddLeaderActivity"
+            android:label="@string/title_activity_add_leader"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".igreja.addIgrejaActivity"
+            android:label="@string/title_activity_add_igreja"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".celulas.EditCelulaActivity"
+            android:label="@string/title_activity_edit_celula"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".celulas.DeleteCelulaActivity"
+            android:label="@string/title_activity_delete_celula"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".relatorios.AddRelatorioActivity"
+            android:label="@string/title_activity_add_relatorio"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".celulas.ReadCelulaActivity"
+            android:label="@string/title_activity_read_celula"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".relatorios.RelatorioActivityView"
+            android:label="@string/title_activity_relatorio_view"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".relatorios.ReadRelatorioActivity"
+            android:label="@string/title_activity_read_relatorio"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".home.HomeActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.CellsGroupLeader.NoActionBar">
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".models.login.LoginActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".Activity_splash_screen"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

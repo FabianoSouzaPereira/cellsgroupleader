@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">CellsGroup</string>
+    <string name="app_name" translatable="false">CGLeader</string>
     <string name="nav_header_title">Sua Igreja em Células</string>
     <string name="nav_header_subtitle">email@email.com</string>
     <string name="action_settings">Configurações</string>
@@ -263,3 +263,4 @@
     <string name="icon_register">Icon Register</string>
     <string name="icon_certo">Icon certo</string>
 </resources>
+
