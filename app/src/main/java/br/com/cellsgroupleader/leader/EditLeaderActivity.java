@@ -32,10 +32,7 @@ import br.com.cellsgroupleader.models.pessoas.Leader;
 import br.com.cellsgroupleader.utils.MaskEditUtil;
 import br.com.cellsgroupleader.utils.ResolveDate;
 
-import static br.com.cellsgroupleader.home.HomeActivity.UI;
-import static br.com.cellsgroupleader.home.HomeActivity.typeUserAdmin;
-import static br.com.cellsgroupleader.home.HomeActivity.uidIgreja;
-import static br.com.cellsgroupleader.home.HomeActivity.useremail;
+import static br.com.cellsgroupleader.home.HomeActivity.*;
 
 public class EditLeaderActivity extends AppCompatActivity {
     private static final String TAG = "TAG";
@@ -345,7 +342,6 @@ public class EditLeaderActivity extends AppCompatActivity {
                 if ( uid != null ) {
 
                     Map<String, Object> userUpdates = new HashMap<>();
-                    userUpdates.put( "/celula" , celula);
                     userUpdates.put( "/nome" , nome);
                     userUpdates.put( "/idade", idade );
                     userUpdates.put( "/sexo", sexo );
@@ -365,17 +361,6 @@ public class EditLeaderActivity extends AppCompatActivity {
                     userUpdates.put( "/email", email );
 
                     leaders.child(uid).updateChildren( userUpdates);
-
-                    if ( !celula.equals( mensagem9 ) ) {
-
-                        pegandoConteudoCelula(celula);
-
-                        //atualiza lider na célula
-                        Map < String, Object > map1 = new HashMap <> ( );
-                        map1.put ( celula + "/" + uidCelula + "/lider" , nome );
-
-                       ref.child( "churchs/" + uidIgreja + "/cells/").updateChildren ( map1 );
-                    }
 
                     Toast.makeText(this,mensagem2, Toast.LENGTH_SHORT).show();
 
@@ -487,7 +472,6 @@ public class EditLeaderActivity extends AppCompatActivity {
     }
 
     public void loadSpinner( final String celulaName){
-        final String ui = UI.getUid ();
         novaRef = databaseReference.child( "churchs/" + uidIgreja + "/cells/");
         query = novaRef.orderByChild ("celula").limitToLast (200);
         queryListener =  new ValueEventListener() {
@@ -501,7 +485,7 @@ public class EditLeaderActivity extends AppCompatActivity {
                         if ( dados.hasChild ( "celula" ) ) {
                             Celula c = dados.getValue ( Celula.class );
                             if ( !c.getCelula ( ).equals ( "" ) ) {
-                                if ( c.getUserId ( ).equals ( ui ) ) {
+                                if ( c.getUserId ( ).equals ( userId )  && c.getLider().equalsIgnoreCase(leaderName)) {
                                     String celula = c.getCelula ( );
                                     cels.add ( celula );
                                 }
@@ -511,6 +495,8 @@ public class EditLeaderActivity extends AppCompatActivity {
                 }
                 ArrayAdapter <String> adapter = new ArrayAdapter <>( EditLeaderActivity.this , R.layout.spinner_dropdown_item , cels );
                 spCelula = findViewById( R.id.spinnerEditcelula );
+                spCelula.setEnabled(false);
+                spCelula.setClickable(false);
                 spCelula.setAdapter( adapter );
 
                 spCelula = findViewById( R.id.spinnerEditcelula );
@@ -596,7 +582,6 @@ public class EditLeaderActivity extends AppCompatActivity {
     @Override
     protected void onStop ( ) {
         query.removeEventListener (queryListener);
-        queryCelula.removeEventListener (listenerCelula);
         super.onStop ( );
     }
 

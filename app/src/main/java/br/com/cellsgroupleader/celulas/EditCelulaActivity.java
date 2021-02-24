@@ -322,7 +322,7 @@ public class EditCelulaActivity extends AppCompatActivity implements NavigationV
                     celulaUpdates.put ( celula + "/" + uid + "/dia" , dia );
                     celulaUpdates.put ( celula + "/" + uid + "/hora" , hora );
                     celulaUpdates.put ( celula + "/" + uid + "/datahora" , DataTime );
-                    celulaUpdates.put ( celula + "/" + uid + "/userId" , userId );
+                  //  celulaUpdates.put ( celula + "/" + uid + "/userId" , userId );
 
                     novaRef2.updateChildren ( celulaUpdates );
 

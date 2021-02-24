@@ -20,6 +20,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ListView
+            android:id="@+id/listViewCelula"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="15dp"
@@ -29,6 +30,7 @@
 
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardviewCells"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"

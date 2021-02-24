@@ -41,11 +41,7 @@ import br.com.cellsgroupleader.igreja.addIgrejaActivity;
 import br.com.cellsgroupleader.models.pessoas.Leader;
 import br.com.cellsgroupleader.relatorios.RelatorioActivityView;
 
-import static br.com.cellsgroupleader.home.HomeActivity.UI;
-import static br.com.cellsgroupleader.home.HomeActivity.group;
-import static br.com.cellsgroupleader.home.HomeActivity.igreja;
-import static br.com.cellsgroupleader.home.HomeActivity.uidIgreja;
-import static br.com.cellsgroupleader.home.HomeActivity.useremailAuth;
+import static br.com.cellsgroupleader.home.HomeActivity.*;
 import static br.com.cellsgroupleader.models.login.LoginActivity.updateUI;
 
 
@@ -92,7 +88,7 @@ public class LeaderActivity extends AppCompatActivity implements Serializable ,N
 
         FloatingActionButton fab = findViewById( R.id.fabLeader );
         fab.setOnClickListener( view -> {
-            if(!igreja.equals("") && !igreja.equals (null)) {
+            if(!igreja.equals ("")) {
                 Intent addLeader = new Intent ( LeaderActivity.this , AddLeaderActivity.class );
                 startActivity ( addLeader );
                 finish ( );
@@ -147,27 +143,23 @@ public class LeaderActivity extends AppCompatActivity implements Serializable ,N
     }
 
     private void readOnlyActive() {
-        UI = FirebaseAuth.getInstance().getCurrentUser();
-        String ui = "";
-        if ( UI != null ) {
-            ui = UI.getUid ();
-        }
+        
         novaRef = databaseReference.child( "churchs/" + uidIgreja + "/leaders/");
-        query = novaRef.orderByChild( "userId").startAt(ui).endAt(ui).limitToLast(limitebusca);
+        query = novaRef.orderByChild("uid").limitToLast(limitebusca);
         queryListener =  new ValueEventListener () {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                uid = "";
-                arrayLeader.clear();
-                  for(DataSnapshot dados : dataSnapshot.getChildren()) {
+              arrayLeader.clear();
+                 for(DataSnapshot dados : dataSnapshot.getChildren()) {
                       try {
                           Leader leader = dados.getValue (Leader.class);
-                          arrayLeader.add(leader);
+                          if(leader.getUid().equals(userUid)){
+                              arrayLeader.add( leader );
+                          }
                       } catch ( Exception e ) {
                           e.printStackTrace ( );
                       }
-                  }
-
+                 }
                 // noinspection UnnecessaryLocalVariable
                 List < Leader > leaders = arrayLeader;
 
@@ -185,12 +177,10 @@ public class LeaderActivity extends AppCompatActivity implements Serializable ,N
                     startActivity(intent);
                     finish();
                 } );
-
                 mAdapter.setOnLongClickListener ( v -> {
                     // Implementar se houver necesidade
                     return false;
                 } );
-
                 recyclerView.setAdapter( mAdapter);
                 mAdapter.notifyDataSetChanged();
                 hiddShowMessage();

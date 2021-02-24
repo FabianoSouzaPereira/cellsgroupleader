@@ -170,7 +170,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
    private boolean validateForm() {
       boolean valid = true;
       String email = editEmail.getEditText().getText().toString().trim();
-      if (TextUtils.isEmpty(email) || validateEmailFormat(email) == false) {
+      if (TextUtils.isEmpty(email) || !validateEmailFormat( email ) ) {
          Toast.makeText(this,getString( R.string.Email_erro), Toast.LENGTH_LONG).show();
          editEmail.setError(getString( R.string.obrigatorio_email_valid));
          editEmail.setFocusable ( true );

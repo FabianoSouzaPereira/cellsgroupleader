@@ -32,11 +32,7 @@ import br.com.cellsgroupleader.igreja.addIgrejaActivity;
 import br.com.cellsgroupleader.leader.LeaderActivity;
 import br.com.cellsgroupleader.models.relatorios.*;
 
-import static br.com.cellsgroupleader.home.HomeActivity.UI;
-import static br.com.cellsgroupleader.home.HomeActivity.group;
-import static br.com.cellsgroupleader.home.HomeActivity.igreja;
-import static br.com.cellsgroupleader.home.HomeActivity.uidIgreja;
-import static br.com.cellsgroupleader.home.HomeActivity.useremailAuth;
+import static br.com.cellsgroupleader.home.HomeActivity.*;
 import static br.com.cellsgroupleader.models.login.LoginActivity.updateUI;
 
 
@@ -124,10 +120,16 @@ public class RelatorioActivityView extends AppCompatActivity implements Navigati
                 rel.clear();
                 for(DataSnapshot ds:dataSnapshot.getChildren()){
                     for(DataSnapshot dados : ds.getChildren()) {
-                        Relatorio r = dados.getValue( Relatorio.class );
-                        String relatorio = r.getCelula();
-                        String datahora = r.getDatahora();
-                        rel.add( relatorio +": "+ datahora);
+                        try{
+                            Relatorio r = dados.getValue( Relatorio.class );
+                            if(r.getLider().equals(leaderName) && r.getCelula().equals(celulaName) ){
+                                String relatorio = r.getCelula();
+                                String datahora = r.getDatahora();
+                                rel.add( relatorio +": "+ datahora);
+                            }
+                        }catch( Exception e ){
+                            e.printStackTrace( );
+                        }
                     }
                 }
 

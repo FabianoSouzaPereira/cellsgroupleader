@@ -1,27 +1,25 @@
 package br.com.cellsgroupleader.home;
 
 import android.annotation.SuppressLint;
+import android.app.*;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.*;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,8 +27,8 @@ import com.google.firebase.database.*;
 import com.google.firebase.functions.FirebaseFunctions;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-
+import java.util.*;
+import androidx.appcompat.widget.Toolbar;
 import br.com.cellsgroupleader.*;
 import br.com.cellsgroupleader.R;
 import br.com.cellsgroupleader.celulas.CelulasActivity;
@@ -40,6 +38,7 @@ import br.com.cellsgroupleader.igreja.addIgrejaActivity;
 import br.com.cellsgroupleader.leader.LeaderActivity;
 import br.com.cellsgroupleader.models.igreja.Igreja;
 import br.com.cellsgroupleader.models.login.LoginActivity;
+import br.com.cellsgroupleader.models.pessoas.*;
 import br.com.cellsgroupleader.relatorios.RelatorioActivityView;
 
 import static br.com.cellsgroupleader.models.login.LoginActivity.updateUI;
@@ -51,14 +50,18 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
    public static String igreja = "";
    public static String useremail = "";
    public static String uidIgreja = "";
+   public static String userId = "";
+   public static String userUid = "-MU-r4Vyh4B86IZ4gT2Z";
+   public static String userFone = "(48)96964-3694";
+   public static String celulaName = "";
+   public static String leaderName = "";
    public static String useremailAuth = "";
-   
    public static boolean typeUserAdmin = true;
-   
    public FirebaseAuth mAuth;
    private FirebaseDatabase firebaseDatabase;
    private DatabaseReference databaseReference;
    private DatabaseReference novaref2 = null;
+   private DatabaseReference novaref3 = null;
    private FirebaseFunctions mFunctions;
    public static final int  Permission_All = 1;
    public static final int PERMISSION_CODE = 3;
@@ -71,6 +74,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
    TextView nhTitle;
    TextView nhEmail;
    TextView nhName;
+   Query query3;
+   ValueEventListener query3listener;
+   Query query4;
+   ValueEventListener query4listener;
+  
    
    @Override
    protected void onCreate(Bundle savedInstanceState) {
@@ -88,8 +96,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
       mAuth = FirebaseAuth.getInstance();
       mFunctions = FirebaseFunctions.getInstance();
       
-      Toolbar toolbar = findViewById( R.id.toolbarhome );
-      setSupportActionBar( toolbar );
+      Toolbar toolbar = findViewById( R.id.toolbar_home );
+      setSupportActionBar(toolbar);
       inicializarFirebase();
       init();
       addDataHora();
@@ -126,48 +134,57 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
          Intent intent = new Intent( HomeActivity.this, LoginActivity.class );
          startActivity( intent );
       }
+      
       pegarPadroes();
    }
-   
+
    public void pegarPadroes() {
-      
       final String ui;
       if (  UI == null ) {
          return;
       }
       ui = UI.getUid ();
       if ( ui.isEmpty()){
-         Toast.makeText( this, "Sem leader cadastrado", Toast.LENGTH_LONG ).show();
+         Toast.makeText( this, "Você não está logado!", Toast.LENGTH_LONG ).show();
          return;
       }
       
-      //carrega dados da Igreja cadastrada
-      novaref2 = databaseReference.child ("churchs/");
-      Query query3 = novaref2.orderByChild ("igrejaID");
-      query3.addValueEventListener (new ValueEventListener () {
+      novaref3 = databaseReference.child("churchs/");
+      query4 = novaref3.orderByChild("members").startAt(userFone, userUid).limitToFirst(1);
+      query4listener = new ValueEventListener( ){
          @Override
-         public void onDataChange ( @NonNull DataSnapshot datasnapshot ) {
-            for(DataSnapshot ds : datasnapshot.getChildren ()) {
-               for ( DataSnapshot sd : ds.getChildren ( ) ) {
-                  String key = sd.getKey ();
-                  if(
-                     !key.equalsIgnoreCase ( "members" )
-                        && !key.equalsIgnoreCase ( "leader" )
-                        && !key.equalsIgnoreCase ( "celulas" )
-                        && !key.equalsIgnoreCase ( "relatorios" )
-                        && !key.equalsIgnoreCase ( "intercession" )
-                        && !key.equalsIgnoreCase ( "Skedule" )
-                  ) {
-                     
-                     Igreja ig = sd.getValue ( Igreja.class );
-                     if (ig.getUser() != null) {
-                        if(ig.getUser ().equals (ui)) {
-                           String members = ig.getMembers ( );
-                           String user = ig.getUser ( );
-                           igreja = ig.getNome ( );
-                           group = ig.getGroup ( );
-                           uidIgreja = ig.getIgrejaID ( );
+         public void onDataChange( @NonNull DataSnapshot snapshot ){
+            for(DataSnapshot sd : snapshot.getChildren ()){
+               for(DataSnapshot ds: sd.getChildren()){
+                  String key0 = ds.getKey();
+                  if(!key0.equalsIgnoreCase ( "members" )
+                     && !key0.equalsIgnoreCase ( "leaders" )
+                     && !key0.equalsIgnoreCase ( "cells" )
+                     && !key0.equalsIgnoreCase ( "reports" )
+                     && !key0.equalsIgnoreCase ( "intercession" )
+                     && !key0.equalsIgnoreCase ( "Skedule" )){
+                        Igreja igr = ds.getValue( Igreja.class );
+                        igreja = igr.getNome( );
+                        group = igr.getGroup( );
+                        uidIgreja = igr.getIgrejaID( );
+                        userId = igr.getUser( );
+                  }
+                  String key = ds.getKey();
+                  if(key.equalsIgnoreCase("leaders")){
+                     try{
+                        HashMap<String, Object> dataMap = (HashMap<String, Object>) ds.getValue();
+                        for(String keys : dataMap.keySet()){
+                          
+                              Object data = dataMap.get( keys );
+                              HashMap<String, Object> leaderData = (HashMap<String, Object>) data;
+                              String uid = leaderData.get("uid").toString();
+                           if(uid.equalsIgnoreCase("-MU-r4Vyh4B86IZ4gT2Z") ){
+                              leaderName = leaderData.get("nome").toString();
+                              celulaName = leaderData.get("celula").toString();
+                           }
                         }
+                     }catch( Exception e ){
+                        e.printStackTrace( );
                      }
                   }
                }
@@ -175,13 +192,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             nhTitle.setText (group);
             nhName.setText(igreja);
          }
-         
+      
          @Override
-         public void onCancelled ( @NonNull DatabaseError error ) {
+         public void onCancelled( @NonNull DatabaseError error ){
          
          }
-      });
-      
+      };
+      query4.addValueEventListener(query4listener);
+ 
    }
    
    @Override
@@ -216,6 +234,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
    
    @Override
    protected void onPause() {
+      query4.removeEventListener(query4listener);
       super.onPause();
    }
    
@@ -236,7 +255,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
    
    @Override
    public void onBackPressed() {
-      AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+      android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(HomeActivity.this);
       builder  = builder.setMessage( "Deseja encerrar o aplicativo ?" );
       builder.setTitle( "Encerrando o aplicativo..." )
          .setCancelable( false )
@@ -258,7 +277,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
    }
    
    private void inicializarFirebase() {
-      FirebaseApp.initializeApp(HomeActivity.this);  //inicializa  o SDK credenciais padrão do aplicativo do Google
+      FirebaseApp.initializeApp(HomeActivity.this);
       firebaseDatabase = FirebaseDatabase.getInstance();
       databaseReference = firebaseDatabase.getReference();
       databaseReference.keepSynced(true);
@@ -379,7 +398,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
       startActivity( igrejas );
    }
    
- 
    public void cardleaderClick(View view) throws Exception{
       Intent leader = new Intent( HomeActivity.this,LeaderActivity.class );
       startActivity( leader );
@@ -393,5 +411,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
    public void cardrelatorioClick(View view) {
       Intent relatorio = new Intent( HomeActivity.this, RelatorioActivityView.class );
       startActivity( relatorio );
+   }
+   public void cardintercessaoClick(View view) {
+      Snackbar.make(view, "Implementação futura", Snackbar.LENGTH_LONG)
+         .setAction("Action", null)
+         .setTextColor(getColor(R.color.colorWhite))
+         .show();
    }
 }

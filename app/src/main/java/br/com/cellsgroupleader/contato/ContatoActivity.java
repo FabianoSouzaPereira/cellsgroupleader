@@ -41,10 +41,7 @@ import br.com.cellsgroupleader.leader.LeaderActivity;
 import br.com.cellsgroupleader.models.pessoas.Leader;
 import br.com.cellsgroupleader.relatorios.*;
 
-import static br.com.cellsgroupleader.home.HomeActivity.group;
-import static br.com.cellsgroupleader.home.HomeActivity.igreja;
-import static br.com.cellsgroupleader.home.HomeActivity.uidIgreja;
-import static br.com.cellsgroupleader.home.HomeActivity.useremailAuth;
+import static br.com.cellsgroupleader.home.HomeActivity.*;
 import static br.com.cellsgroupleader.models.login.LoginActivity.updateUI;
 
 
@@ -69,7 +66,7 @@ public class ContatoActivity extends AppCompatActivity implements NavigationView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_contato );
-        Toolbar toolbar = findViewById( R.id.toolbar );
+        Toolbar toolbar = findViewById( R.id.toolbar_contato );
         setSupportActionBar( toolbar );
         UI = FirebaseAuth.getInstance().getCurrentUser();
         initcomponents();
@@ -78,33 +75,24 @@ public class ContatoActivity extends AppCompatActivity implements NavigationView
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager (this);
         recyclerView.setLayoutManager(layoutManager);
-        final String ui = UI.getUid ();
 
         novaRef = databaseReference.child("churchs/" + uidIgreja + "/leaders/");
-        querycontato = novaRef.orderByChild( "userId").startAt(ui).limitToLast(limitebusca);
+        querycontato = novaRef.orderByChild("uid").limitToLast(limitebusca);
         queryContatoListener =  new ValueEventListener () {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                int count=0;
                 arrayLeader.clear();
                 for(DataSnapshot dados : dataSnapshot.getChildren()) {
                     try {
-                        Leader u = dados.getValue (Leader.class);
-                        if(u.getUserId ().equals (ui)) {
-                            count=1;
-                            arrayLeader.add ( u );
-                        }else{
-                            if(count < 1) {
-                                count=2;
-                                Leader a = new Leader ( );
-                                a.setNome ( "Lista de Lideres está vazia" );
-                                arrayLeader.add ( a );
-                            }
+                        Leader leader = dados.getValue (Leader.class);
+                        if(leader.getUserId().equals(userId)){
+                            arrayLeader.add( leader );
                         }
                     } catch ( Exception e ) {
                         e.printStackTrace ( );
                     }
                 }
+                // noinspection UnnecessaryLocalVariable
                 List < Leader > leaders = arrayLeader;
 
                 mAdapter = new AdapterListViewContato(leaders, ContatoActivity.this, ContatoActivity.this );

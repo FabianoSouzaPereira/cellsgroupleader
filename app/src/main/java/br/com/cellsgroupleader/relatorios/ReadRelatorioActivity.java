@@ -82,7 +82,7 @@ public class ReadRelatorioActivity extends AppCompatActivity implements Navigati
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_read_relatorio );
-        Toolbar toolbar = findViewById( R.id.toolbar );
+        Toolbar toolbar = findViewById( R.id.toolbar_read_relatorio );
         setSupportActionBar( toolbar );
         inicializarFirebase();
         inicializarComponentes();
@@ -138,7 +138,7 @@ public class ReadRelatorioActivity extends AppCompatActivity implements Navigati
     private void mostraRelatorio() {
         final String ui = UI.getUid ();
         novaRef6 = databaseReference.child( "churchs/" + uidIgreja + "/Reports/" + cel_1 );
-        novaRef6.orderByChild ("userId" ).equalTo (ui).limitToLast(1);
+        novaRef6.orderByChild ("uid" ).limitToLast(200);
         novaRef6.addValueEventListener( new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

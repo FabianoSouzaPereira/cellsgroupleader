@@ -95,7 +95,23 @@ public final class Celula {
    public String getUserId() {
       return userId;
    }
-
-    /*    @Override
+   
+   public String getDatahora( ){
+      return datahora;
+   }
+   
+   public void setDatahora( String datahora ){
+      this.datahora = datahora;
+   }
+   
+   public String getIgreja( ){
+      return igreja;
+   }
+   
+   public void setIgreja( String igreja ){
+      this.igreja = igreja;
+   }
+   
+   /*    @Override
     public String toString() {  return this.celula;  }*/
 }

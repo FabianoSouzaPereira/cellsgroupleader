@@ -146,6 +146,7 @@
     <string name="sexo">Sexo</string>
     <string name="idade">Idade</string>
     <string name="nome_required">Nome*</string>
+    <string name="nome_notenable">Nome - Editável pelo Pastor</string>
     <string name="email_required">Email*</string>
     <string name="cargo_igreja">Cargo Igreja*</string>
     <string name="grupo_padr_o">Grupo Padrão</string>

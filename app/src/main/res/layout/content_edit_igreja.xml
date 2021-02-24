@@ -43,9 +43,9 @@
                     android:layout_height="wrap_content"
                     android:clickable="false"
                     android:focusable="false"
+                    android:longClickable="false"
                     android:hint="@string/denominacao"
                     android:inputType="text"
-                    android:longClickable="false"
                     android:maxLength="65" />
             </com.google.android.material.textfield.TextInputLayout>
 

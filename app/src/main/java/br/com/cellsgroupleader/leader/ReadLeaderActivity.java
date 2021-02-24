@@ -32,11 +32,7 @@ import br.com.cellsgroupleader.contato.ContatoActivity;
 import br.com.cellsgroupleader.models.pessoas.Leader;
 import br.com.cellsgroupleader.relatorios.RelatorioActivityView;
 
-import static br.com.cellsgroupleader.home.HomeActivity.group;
-import static br.com.cellsgroupleader.home.HomeActivity.igreja;
-import static br.com.cellsgroupleader.home.HomeActivity.uidIgreja;
-import static br.com.cellsgroupleader.home.HomeActivity.useremail;
-import static br.com.cellsgroupleader.home.HomeActivity.useremailAuth;
+import static br.com.cellsgroupleader.home.HomeActivity.*;
 
 public class ReadLeaderActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "TAG";
@@ -149,7 +145,7 @@ public class ReadLeaderActivity extends AppCompatActivity implements NavigationV
 
     private void readOnlyActive() {
         leaders = databaseReference.child( "churchs/" + uidIgreja + "/leaders/");
-        query = leaders.orderByChild( "uid" ).equalTo (uid).limitToFirst(1);
+        query = leaders.orderByChild( "uid" ).equalTo (userUid).limitToFirst(1);
         queryListener =  new ValueEventListener () {
 
             @Override
@@ -250,7 +246,7 @@ public class ReadLeaderActivity extends AppCompatActivity implements NavigationV
 
     @Override
     public boolean onCreateOptionsMenu( Menu menu) {
-        getMenuInflater().inflate( R.menu.menu_edit_delete, menu );
+        getMenuInflater().inflate( R.menu.menu_edit_cancel, menu );
         return true;
     }
 

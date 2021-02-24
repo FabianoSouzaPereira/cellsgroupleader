@@ -29,6 +29,7 @@ import br.com.cellsgroupleader.home.HomeActivity;
 import br.com.cellsgroupleader.models.igreja.Igreja;
 
 import static br.com.cellsgroupleader.home.HomeActivity.uidIgreja;
+import static br.com.cellsgroupleader.home.HomeActivity.userId;
 
 
 @SuppressWarnings( "ALL" )
@@ -66,7 +67,7 @@ public class IgrejasCriadasActivity<onIgrejaListener> extends AppCompatActivity 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_igrejas_criadas );
-        Toolbar toolbar = findViewById( R.id.toolbar );
+        Toolbar toolbar = findViewById( R.id.toolbar_igrejas_criadas );
         setSupportActionBar( toolbar );
         inicializaComponentes();
         inicializaFirebase();
@@ -96,9 +97,8 @@ public class IgrejasCriadasActivity<onIgrejaListener> extends AppCompatActivity 
     }
 
     private void readIgrejaCadastrada() {
-        final String ui = HomeActivity.UI.getUid ().toString ();
         novaRef = databaseReference.child( "churchs/"  + uidIgreja);
-        Query query = novaRef.orderByChild ("user").equalTo (ui);
+        Query query = novaRef.orderByChild ("user").equalTo (userId);
         listener =  new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -115,7 +115,7 @@ public class IgrejasCriadasActivity<onIgrejaListener> extends AppCompatActivity 
 
                             Igreja igr = sd.getValue ( Igreja.class );
                             if (igr.getUser() != null) {
-                                if(igr.getUser ().equals (ui)) {
+                                if(igr.getUser ().equals (userId)) {
                                     uid = igr.getUid ( );
                                     String user = igr.getUser ( );
                                     String group = igr.getGroup ( );
@@ -227,7 +227,7 @@ public class IgrejasCriadasActivity<onIgrejaListener> extends AppCompatActivity 
 
     @Override
     public boolean onCreateOptionsMenu( Menu menu) {
-        getMenuInflater().inflate( R.menu.menu_edit_delete , menu );
+        getMenuInflater().inflate( R.menu.menu_cancel , menu );
         return true;
     }
 
