@@ -413,7 +413,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
       startActivity( relatorio );
    }
    public void cardintercessaoClick(View view) {
-      Snackbar.make(view, "Implementação futura", Snackbar.LENGTH_LONG)
+      Snackbar.make(view, getString ( R.string.implementacao_futura ), Snackbar.LENGTH_LONG)
          .setAction("Action", null)
          .setTextColor(getColor(R.color.colorWhite))
          .show();
