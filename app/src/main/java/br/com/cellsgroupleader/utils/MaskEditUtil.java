@@ -8,6 +8,8 @@ import com.google.android.material.textfield.TextInputLayout;
 @SuppressWarnings( "ALL" )
 public abstract class MaskEditUtil {
    
+   public static final String FORMAT_DDI = "###";
+   public static final String FORMAT_DDD = "##";
    public static final String FORMAT_FONE = "(##)#####-####";
    public static final String FORMAT_FONE_FIXO = "(##)####-####";
    public static final String FORMAT_CEP = "#####-###";

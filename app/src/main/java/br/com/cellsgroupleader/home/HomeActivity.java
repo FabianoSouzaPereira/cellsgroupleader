@@ -2,10 +2,10 @@ package br.com.cellsgroupleader.home;
 
 import android.annotation.SuppressLint;
 import android.app.*;
-import android.content.Context;
-import android.content.Intent;
+import android.content.*;
 import android.content.pm.PackageManager;
-import android.os.Bundle;
+import android.graphics.*;
+import android.os.*;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,7 +14,7 @@ import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
+import androidx.core.app.*;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -26,9 +26,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
 import com.google.firebase.functions.FirebaseFunctions;
 
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import androidx.appcompat.widget.Toolbar;
+import androidx.preference.*;
+
 import br.com.cellsgroupleader.*;
 import br.com.cellsgroupleader.R;
 import br.com.cellsgroupleader.celulas.CelulasActivity;
@@ -41,18 +44,25 @@ import br.com.cellsgroupleader.models.login.LoginActivity;
 import br.com.cellsgroupleader.models.pessoas.*;
 import br.com.cellsgroupleader.relatorios.RelatorioActivityView;
 
+import static br.com.cellsgroupleader.ValuesPaternActivity.DDI;
+import static br.com.cellsgroupleader.ValuesPaternActivity.FONE;
+import static br.com.cellsgroupleader.ValuesPaternActivity.LEADERID;
+import static br.com.cellsgroupleader.ValuesPaternActivity.SHARED_PREFS;
 import static br.com.cellsgroupleader.models.login.LoginActivity.updateUI;
 
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
    public static FirebaseUser UI;
+   private static final String CHANNEL_ID = "Relatório";
+   private static final String FILE_NAME = "Config.txt";
    public static String group="";
    public static String igreja = "";
    public static String useremail = "";
    public static String uidIgreja = "";
    public static String userId = "";
-   public static String userUid = "-MU-r4Vyh4B86IZ4gT2Z";
-   public static String userFone = "(48)96964-3694";
+   public static String userFoneDDI = "";
+   public static String userUid = "";
+   public static String userFone = "";
    public static String celulaName = "";
    public static String leaderName = "";
    public static String useremailAuth = "";
@@ -70,7 +80,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
    };
    public static boolean Logado = false;
    public static String tag = "0";
-   
+   private static int count = 0;
    TextView nhTitle;
    TextView nhEmail;
    TextView nhName;
@@ -83,6 +93,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate( savedInstanceState );
+      inicializarFirebase();
       UI = FirebaseAuth.getInstance().getCurrentUser();
       if(UI != null) {
          updateUI ( UI ); //verifica se leader está logado
@@ -93,12 +104,22 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
          startActivity( intent );
          return;
       }
+      SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE );
+      String  ddi = sharedPreferences.getString(DDI, "" );
+      userFone = sharedPreferences.getString(FONE, "" );
+      userUid = sharedPreferences.getString(LEADERID, "" );
+
+      if (userFone.isEmpty() || userUid.isEmpty() || ddi.isEmpty()){
+         Intent pattern = new Intent( HomeActivity.this, ValuesPaternActivity.class );
+         startActivity( pattern );
+         return;
+      }
       mAuth = FirebaseAuth.getInstance();
       mFunctions = FirebaseFunctions.getInstance();
       
       Toolbar toolbar = findViewById( R.id.toolbar_home );
       setSupportActionBar(toolbar);
-      inicializarFirebase();
+      
       init();
       addDataHora();
       mAuth.getUid ();
@@ -122,6 +143,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
       nhName = headerView.findViewById (R.id.nhName);
       nhEmail = headerView.findViewById (R.id.nhEmail);
       nhEmail.setText (useremailAuth);
+
    }
    
    @Override
@@ -178,7 +200,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                               Object data = dataMap.get( keys );
                               HashMap<String, Object> leaderData = (HashMap<String, Object>) data;
                               String uid = leaderData.get("uid").toString();
-                           if(uid.equalsIgnoreCase("-MU-r4Vyh4B86IZ4gT2Z") ){
+                           if(uid.equalsIgnoreCase(userUid) ){
                               leaderName = leaderData.get("nome").toString();
                               celulaName = leaderData.get("celula").toString();
                            }
@@ -201,6 +223,42 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
       query4.addValueEventListener(query4listener);
  
    }
+   
+   public void mainloadFile() {
+      File file = new File( getFilesDir() + "/" + FILE_NAME );
+      if (file.exists()) {
+         FileInputStream fis = null;
+         try {
+            
+            fis = openFileInput( FILE_NAME );
+            InputStreamReader isr = new InputStreamReader( fis );
+            BufferedReader br = new BufferedReader( isr );
+            StringBuilder sb = new StringBuilder();
+            String text;
+            
+            while ((text = br.readLine()) != null) {
+               sb.append( text ).append( "\n" );
+            }
+            
+            String read = sb.toString();
+            String [] v = read.split(",");
+            userFone = v[0];
+            userUid = v[1];
+            
+         } catch ( FileNotFoundException e) {
+            e.printStackTrace();
+         } catch (IOException e) {
+            e.printStackTrace();
+         } finally {
+            try {
+               Objects.requireNonNull(fis).close();
+            } catch (IOException e) {
+               e.printStackTrace();
+            }
+         }
+      }
+   }
+   
    
    @Override
    protected void onResume() {
@@ -234,7 +292,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
    
    @Override
    protected void onPause() {
-      query4.removeEventListener(query4listener);
+      if(query4listener != null){
+         query4.removeEventListener(query4listener);
+      }
       super.onPause();
    }
    
@@ -255,25 +315,29 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
    
    @Override
    public void onBackPressed() {
-      android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(HomeActivity.this);
-      builder  = builder.setMessage( "Deseja encerrar o aplicativo ?" );
-      builder.setTitle( "Encerrando o aplicativo..." )
-         .setCancelable( false )
-         .setNegativeButton( "cancelar", ( dialog , which ) -> {
-            //  Toast.makeText(getApplicationContext(), "Cancelado", Toast.LENGTH_SHORT).show();
-         } )
-         .setPositiveButton( "Ok", ( dialog , which ) -> {
-            try {
-               //  Finish this activity as well as all activities immediately below it in the current task that have the same affinity.
-               finishAffinity();
-            } catch (Throwable throwable) {
-               throwable.printStackTrace();
-            }
-         } );
+      if( count == 1){
+         count=0;
+         AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+         builder  = builder.setMessage( "Deseja encerrar o aplicativo ?" );
+         builder.setTitle( "Encerrando o aplicativo..." )
+            .setCancelable( false )
+            .setNegativeButton( "cancelar", ( dialog , which ) -> {
+            } )
+            .setPositiveButton( "Ok", ( dialog , which ) -> {
+               try {
+                  //  Finish this activity as well as all activities immediately below it in the current task that have the same affinity.
+                  finishAffinity();
+               } catch (Throwable throwable) {
+                  throwable.printStackTrace();
+               }
+            } );
       
-      AlertDialog alertDialog = builder . create () ;
-      alertDialog.show();
-      
+         AlertDialog alertDialog = builder . create () ;
+         alertDialog.show();
+      }else{
+         count=1;
+         super.onBackPressed();
+      }
    }
    
    private void inicializarFirebase() {
@@ -334,6 +398,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
       }else if ( itemId == R.id.action_lideres) {
          Intent addlideres = new Intent ( HomeActivity.this , LeaderActivity.class );
          startActivity ( addlideres);
+         return true;
+      }else if ( itemId == R.id.action_settings) {
+         Intent settings = new Intent ( HomeActivity.this , SettingsActivity.class );
+         startActivity ( settings );
          return true;
       }else if ( itemId == R.id.action_Sobre) {
          Intent sobre= new Intent ( HomeActivity.this , SobreActivity.class );

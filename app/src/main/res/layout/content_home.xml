@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/content_home"
     android:layout_gravity="top"
     android:weightSum="10"
     tools:context=".home.HomeActivity"

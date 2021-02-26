@@ -225,8 +225,8 @@
     <string name="email">Email</string>
     <string name="esqueci_a_senha">Esqueci a senha</string>
     <string name="erroCampoObrigatorio">Este campo e obrigatório</string>
-    <string name="criadocelula" >Criado célula com sucesso</string>
-    <string name="erroCriarcelula" >Erro ao tentar criar célula !</string>
+    <string name="criadocelula">Criado célula com sucesso</string>
+    <string name="erroCriarcelula">Erro ao tentar criar célula !</string>
     <string name="erroPreencherTudo">Todos os campos tem que ser preenchidos !</string>
     <string name="erroNaoAdmin">Você não é um líder administrador. \n Não pode criar celulas !</string>
     <string name="erroEditardocelula">Erro ao tentar Editar célula !</string>
@@ -264,5 +264,27 @@
     <string name="icon_register">Icon Register</string>
     <string name="icon_certo">Icon certo</string>
     <string name="implementacao_futura">Implementaçao futura.</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="Configura_o_de_acesso">Configuração de acesso</string>
+    <string name="telefone_titulo">Celular</string>
+    <string name="userUid">Id do Lider fornecida pelo Pastor</string>
+    <string name="Celular">Celular</string>
+    <string name="liderId">Lider Id</string>
+    <string name="Celular_lider_acesso">Celula que o lider tem acesso</string>
+    <string name="NumeroCelular">Numero do celular</string>
+    <string name="_99_99999_9999">(99)99999-9999</string>
+    <string name="ex_mu_rjo1xhfxg_zcp6ag">ex.: -MU-rJO1XHfxG-zCP6aG</string>
+    <string name="avan_ar">Avançar</string>
+    <string name="Codigo">Código</string>
+
 </resources>
 

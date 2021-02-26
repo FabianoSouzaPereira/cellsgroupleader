@@ -59,6 +59,9 @@
 
         <!-- Não usados -->
         <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="ThemeCustom" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="android:backgroundTint">@color/WhiteSmoke</item>
+    </style>
 
 
 </resources>
