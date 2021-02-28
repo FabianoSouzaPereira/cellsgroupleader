@@ -3,24 +3,24 @@
 
     <PreferenceCategory app:title="@string/Configura_o_de_acesso">
         <EditTextPreference
-            android:defaultValue="@string/Celular_lider_acesso"
-            android:key="celula"
+            android:defaultValue=""
+            android:key="Celula"
             android:selectAllOnFocus="true"
             android:title="@string/celula"
             app:useSimpleSummaryProvider="true" />
 
         <EditTextPreference
-            android:defaultValue="@string/userUid"
-            android:key="userUid"
+            android:defaultValue=""
+            android:key="LiderID"
             android:selectAllOnFocus="true"
             android:title="@string/liderId"
             app:useSimpleSummaryProvider="true" />
 
         <EditTextPreference
-            android:defaultValue="@string/NumeroCelular"
+            android:defaultValue=""
             android:summary="@string/telefone"
             android:title="@string/Celular"
-            app:key="celular"
+            app:key="Fone"
             app:title="@string/Celular"
             app:useSimpleSummaryProvider="true" />
 

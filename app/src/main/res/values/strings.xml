@@ -285,6 +285,8 @@
     <string name="ex_mu_rjo1xhfxg_zcp6ag">ex.: -MU-rJO1XHfxG-zCP6aG</string>
     <string name="avan_ar">Avançar</string>
     <string name="Codigo">Código</string>
+    <string name="configura_o_de_acesso_n_com_seu_n_mero_de_celular_e_id">Configuração de acesso \n com seu número de celular e ID</string>
+    <string name="insira_o_n_mero_do_seu_celular">Insira o número do seu celular</string>
 
 </resources>
 

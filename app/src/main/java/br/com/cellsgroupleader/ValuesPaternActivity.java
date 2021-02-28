@@ -1,12 +1,11 @@
 package br.com.cellsgroupleader;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.*;
-import android.os.Bundle;
-import android.security.keystore.*;
+import android.os.*;
 import android.view.*;
 import android.widget.*;
+
+import androidx.appcompat.app.*;
 
 import com.google.android.material.textfield.*;
 
@@ -15,10 +14,7 @@ import java.util.*;
 import br.com.cellsgroupleader.home.*;
 import br.com.cellsgroupleader.utils.*;
 
-import static androidx.test.espresso.intent.Intents.init;
-import static br.com.cellsgroupleader.home.HomeActivity.userUid;
-import static br.com.cellsgroupleader.home.HomeActivity.userFone;
-import static br.com.cellsgroupleader.home.HomeActivity.userFoneDDI;
+import static br.com.cellsgroupleader.home.HomeActivity.*;
 
 public class ValuesPaternActivity extends AppCompatActivity{
    public static final String SHARED_PREFS = "sharedPrefs";
@@ -82,7 +78,7 @@ public class ValuesPaternActivity extends AppCompatActivity{
   
   public void saveData(){
    validate = true;
-   String ddi = textDDI.getEditText ( ).getText().toString().trim();
+   String ddi = Objects.requireNonNull( textDDI.getEditText( ),"" ).getText().toString().trim();
      if( ddi.equals ("")||  ddi.length() > 3){
         validate = false;
         textDDI.setError(mensagem6);
@@ -91,7 +87,7 @@ public class ValuesPaternActivity extends AppCompatActivity{
      }else{
         textDDI.setError(null);
      }
-   String fone = textFone.getEditText ( ).getText().toString().trim();
+   String fone = Objects.requireNonNull( textFone.getEditText( ),"" ).getText().toString().trim();
      if( fone.equals ( "" ) || fone.length ( ) < 14 ){
         validate = false;
         textFone.setError(mensagem7);
@@ -100,7 +96,7 @@ public class ValuesPaternActivity extends AppCompatActivity{
      }else{
         textFone.setError(null);
      }
-   String id = textID.getEditText ( ).getText().toString().trim();
+   String id = Objects.requireNonNull( textID.getEditText( ),"" ).getText().toString().trim();
      if( id.isEmpty()){
         validate = false;
         textID.setError(mensagem1);
@@ -135,9 +131,9 @@ public class ValuesPaternActivity extends AppCompatActivity{
   }
   
   public void UpdateData(){
-     textDDI.getEditText( ).setText(ddi);
-     textFone.getEditText( ).setText(fone);
-     textID.getEditText( ).setText(id);
+     Objects.requireNonNull( textDDI.getEditText( ),"" ).setText(ddi);
+     Objects.requireNonNull( textFone.getEditText( ),"" ).setText(fone);
+     Objects.requireNonNull( textID.getEditText( ),"" ).setText(id);
   }
    
    @Override

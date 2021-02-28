@@ -8,7 +8,6 @@
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <application
         android:name=".FirebaseHandler"
         android:allowBackup="true"
@@ -22,7 +21,12 @@
         android:versionCode="1"
         android:versionName="1.0.0"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ValuesPaternActivity"></activity>
+        <!-- You don't need to include android:required="false" if your app's
+         minSdkVersion is 28 or higher. -->
+        <uses-library android:name="android.test.runner"
+            android:required="false" />
+
+        <activity android:name=".ValuesPaternActivity"/>
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
